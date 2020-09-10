@@ -1,4 +1,10 @@
 import React from 'react';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Favorite from '@material-ui/icons/Favorite';
+import Checkbox from '@material-ui/core/Checkbox';
+import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+
 const Posts = props =>{
     if(props.loading){
         return <h2>Loading...</h2>;
@@ -16,7 +22,10 @@ const Posts = props =>{
                                 <p>Specie: {post.species}</p>
                                 <p>Episodes: {post.episode.length}</p>
                                 <p>Status: {post.status}</p>
-                                <button>Select</button> 
+                                <FormControlLabel
+                                    control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" />}
+                                    onClick={()=>props.selected(index)}
+                                /> 
                         </div>
                 </div>
         </div>
