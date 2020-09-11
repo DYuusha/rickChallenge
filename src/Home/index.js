@@ -50,7 +50,7 @@ componentDidMount = async () =>{
     this.setState({
             loadingPost: false
         })
-    this.saveCharacters();
+    // this.saveCharacters();
 }
  changePage =()=>{
     const indexOfLastPost = this.state.currentPage * this.state.postsPerPage;
