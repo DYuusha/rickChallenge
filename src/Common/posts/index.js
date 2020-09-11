@@ -1,5 +1,4 @@
 import React from 'react';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Favorite from '@material-ui/icons/Favorite';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -17,7 +16,7 @@ const Posts = props =>{
                 <div className="col-12 col-xs-6 col-md-6 col-lg-4 col-xl-3 p-0 m-0 mb-2" key={index}>
                 <div className="w-100 row p-0 m-0 d-flex justify-content-center align-items-center">
                         <div className="col-12 image  d-flex justify-content-center align-items-center" >
-                            <img src={post.image} style={{maxWidth:'250px'}}/>
+                            <img alt={post.name} src={post.image} style={{maxWidth:'250px'}}/>
                         </div>
                         <div className="col-12 charContent  d-flex flex-column justify-content-center align-items-start pt-1" style={{maxWidth:'250px'}}>
                                 <p className="charData mb-0"><b>Name:</b> {post.name}</p>

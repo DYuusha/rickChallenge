@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Menu from '../../Common/menu/';
 import firebase from 'firebase';
-import swal from 'sweetalert';
 import { withRouter } from 'react-router-dom';
 const initState={
     character:[],
