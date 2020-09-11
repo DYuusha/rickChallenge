@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress';
 // import CharacterLoader from '../Common/characterLoader/';
 import Posts from '../Common/posts';
+import { withRouter } from 'react-router-dom';
 import Pagination from '../Common/pagination';
+import Menu from '../Common/menu';
 import firebase from 'firebase';
+import Button from '@material-ui/core/Button';
 import swal from 'sweetalert';
 import axios from 'axios';
 const initState={
@@ -17,7 +20,6 @@ const initState={
     readyButton: false,
     searchValue: ''
 }
-
 class Home extends Component{
     constructor(props) {
         super(props)
@@ -43,7 +45,8 @@ componentDidMount = async () =>{
     this.setState({
             loadingPost: false
         })
-    }
+    // this.saveCharacters();
+}
  changePage =()=>{
     const indexOfLastPost = this.state.currentPage * this.state.postsPerPage;
     const indexOfFirstPost = indexOfLastPost- this.state.postsPerPage;
@@ -53,20 +56,44 @@ componentDidMount = async () =>{
         currentPosts: currentPost,
     })
  }   
-paginate =async(number)=>{
+paginate = async(number) => {
     await this.setState({
        currentPage: number
     })
     await this.changePage();
 }
-saveTop =async()=> {
+saveTop = async () => {
     try {
-        console.log(this.state.selectedArray)
-        await firebase.firestore().collection('top5').add({characters: this.state.selectedArray})
+        let response = await firebase.firestore().collection('characters').doc('completeList')
+        let actualCount=[];
+        const actualList= this.state.selectedArray;
+            let doc = await response.get()
+            if(doc.exists){
+                actualCount= await doc.data().characters;
+                // console.log(actualList)
+                await actualList.forEach((element, index) => {
+                    let res = actualCount.findIndex(charac => charac.name===element.name)
+                    actualCount[res].count+=1
+                });
+                 await firebase.firestore().collection('top5').add({characters: this.state.selectedArray})
+                 await firebase.firestore().collection('characters').doc("completeList").set({characters: actualCount})
+                 swal("Good job!", "You added your list!", "success");
+                 this.props.history.push('/list')
+            }
+            else{
+                console.log('no such document!')
+            }
     }
     catch(error){
         console.log(error)
     }
+}
+saveCharacters=async()=>{
+    let array=[]
+    await this.state.posts.forEach(element =>
+        array.push({name: element.name, count: 0})
+    )
+    await firebase.firestore().collection('characters').doc("completeList").set({characters: array})
 }
 selected =(index)=>{
     let plus = this.state.selected;
@@ -131,19 +158,27 @@ characterFilterOnChange =async(event) => {
         const {loadingPost,postsPerPage,posts,currentPosts,selected,readyButton,searchValue} = this.state;
         return (
             <div>
+                <Menu 
+                value={searchValue} 
+                onChange={this.characterFilterOnChange}
+                goHome={() => this.props.history.push('/')}
+                goTop={() => this.props.history.push('/top')}
+                goList={() => this.props.history.push('/list')}
+                searchValue={true}
+                />
                 {loadingPost ?
                     <CircularProgress/>
                 :
                 <div className="container"> 
                     <h1>Rick y Morty Challenge</h1>
-                    <p>Selected: {selected}</p>
-                    <input type ="text" value={searchValue} onChange={this.characterFilterOnChange} />
+                    <p className="mb-2">Selected: {selected}</p>
+                    {/* <input type ="text" value={searchValue}  /> */}
                     {readyButton ?
-                    <button onClick={this.saveTop}>Create Top 5 List</button>
+                    <Button variant="contained" onClick={this.saveTop}>Create Top 5 List</Button>
                     :
-                    <button onClick={this.saveTop} disabled>Create Top 5 List</button>
+                    <Button variant="contained" onClick={this.saveTop} disabled>Create Top 5 List</Button>
                     }
-                    <div className="row p-0 m-0">
+                    <div className="row mt-2 p-0 m-0">
                         <Posts 
                         data={currentPosts} 
                         loading={loadingPost}
@@ -166,4 +201,4 @@ characterFilterOnChange =async(event) => {
     
 }
 
-export default Home
+export default withRouter(Home)

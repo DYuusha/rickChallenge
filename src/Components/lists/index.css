@@ -1,0 +1,6 @@
+.singleTable{
+    cursor: pointer
+}
+.singleTable:hover{
+    background-color: #000;
+}
