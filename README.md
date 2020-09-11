@@ -1,6 +1,12 @@
-##Rick and Morty Challenge 
+# Rick and Morty Challenge 
 
-Usign Firebase, Axios, Material-UI, Bootstrap and React js
+## Technologies: 
 
-Live Site: https://clever-goodall-cbf857.netlify.app/
+- Firebase 
+- Axios 
+- Material-UI 
+- Bootstrap
+- React js
+
+### Live Site: https://clever-goodall-cbf857.netlify.app/
 
