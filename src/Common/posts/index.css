@@ -1,0 +1,9 @@
+.charData{
+    font-size: 13px;
+    text-align: left;
+}
+.charContent{
+    border-bottom: 1px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+}

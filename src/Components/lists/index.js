@@ -72,7 +72,7 @@ class List extends Component{
           .then( async(willDelete) => {
             if (willDelete) {
                 firebase.firestore().collection("top5").doc(this.state.idList[id]).delete().then(function() {
-                    console.log("Document successfully deleted!");
+                    // console.log("Document successfully deleted!");
                     }).catch(function(error) {
                         console.error("Error removing document: ", error);
                     });

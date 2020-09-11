@@ -18,7 +18,8 @@ const initState={
     selectedArray:[],
     selected: 0,
     readyButton: false,
-    searchValue: ''
+    searchValue: '',
+    checkedList:[]
 }
 class Home extends Component{
     constructor(props) {
@@ -33,8 +34,12 @@ class Home extends Component{
             const response = await axios.get('https://rickandmortyapi.com/api/character');
             await this.setState({ 
                 posts: response.data.results,
-                
              });
+             let checked=[];
+             response.data.results.forEach(element =>checked.push(false))
+           await this.setState({
+                 checkedList: checked
+             })
           } catch (error) {
             console.log(error);
           }
@@ -45,7 +50,7 @@ componentDidMount = async () =>{
     this.setState({
             loadingPost: false
         })
-    // this.saveCharacters();
+    this.saveCharacters();
 }
  changePage =()=>{
     const indexOfLastPost = this.state.currentPage * this.state.postsPerPage;
@@ -98,23 +103,28 @@ saveCharacters=async()=>{
 selected =(index)=>{
     let plus = this.state.selected;
     let actualArray = this.state.selectedArray; //actual array
-    let newElement = this.state.posts[index]; //clicked element
-    
+    let positionCheck =index;
+    let newElement = this.state.posts[positionCheck]; //clicked element
+    let checked = this.state.checkedList;
+    console.log(checked)
+    console.log(index)
+    checked[positionCheck] = !checked[positionCheck]
     if(!actualArray.includes(newElement) ){
         if(actualArray.length<5){
             actualArray.push(newElement)
             plus++;
             this.setState({
                 selected: plus,
-                selectedArray: actualArray
+                selectedArray: actualArray,
+                checkedList: checked
             })
         }
     }
     else{
         let position = actualArray.indexOf(newElement);
-        console.log(position)
+        // console.log(position)
         actualArray.splice(position, 1);
-        console.log(actualArray)
+        // console.log(actualArray)
         if(plus>=1){
             plus--;
         }
@@ -155,7 +165,7 @@ characterFilterOnChange =async(event) => {
     
 }
     render (){
-        const {loadingPost,postsPerPage,posts,currentPosts,selected,readyButton,searchValue} = this.state;
+        const {loadingPost,postsPerPage,posts,currentPosts,selected,readyButton,searchValue, checkedList, currentPage} = this.state;
         return (
             <div>
                 <Menu 
@@ -178,11 +188,14 @@ characterFilterOnChange =async(event) => {
                     :
                     <Button variant="contained" onClick={this.saveTop} disabled>Create Top 5 List</Button>
                     }
-                    <div className="row mt-2 p-0 m-0">
+                    <div className="row mt-2 p-0 m-0 d-flex flex-column justify-content-center align-items-center">
                         <Posts 
                         data={currentPosts} 
                         loading={loadingPost}
                         selected ={this.selected}
+                        checked={checkedList}
+                        currentPage={currentPage}
+                        postsPerPage={postsPerPage}
                         />
                         <Pagination 
                         postsPerPage={postsPerPage} 

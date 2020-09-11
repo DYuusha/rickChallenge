@@ -19,7 +19,7 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
-
+console.log = function () { };
 const RouterApp = (<Router>
   <App />
 </Router>)
